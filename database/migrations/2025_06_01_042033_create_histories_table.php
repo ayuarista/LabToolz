@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('histories', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('loan_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null'); //ngasi tau siapa yang ngasi action
+            $table->enum('action', ['created', 'approved', 'returned', 'late']);
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }
