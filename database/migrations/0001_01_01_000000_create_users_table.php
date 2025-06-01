@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->enum('role', ['teacher', 'student']);
-            $table->dateTime('created_at');
-            $table->dateTime('updated_at');
             $table->timestamps();
         });
 

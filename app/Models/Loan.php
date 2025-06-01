@@ -21,4 +21,9 @@ class Loan extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function loanItems()
+    {
+        return $this->hasMany(LoanItem::class);
+    }
 }
