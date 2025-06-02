@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Loan;
-use App\Models\User;
 
 class LoanController extends Component
 {
