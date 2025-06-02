@@ -10,8 +10,8 @@ class ItemController extends Component
     public $items;
     public function mount()
     {
-        $this->items = item::all();
-        
+        $this->items = Item::all();
+
     }
     public function render()
     {

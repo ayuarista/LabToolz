@@ -5,7 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\ReturnItem;
 
-class ReturnController extends Component
+class ReturnItemController extends Component
 {
     public $returns;
 
@@ -15,6 +15,6 @@ class ReturnController extends Component
     }
     public function render()
     {
-        return view('livewire.return-controller');
+        return view('livewire.return-item-controller');
     }
 }
