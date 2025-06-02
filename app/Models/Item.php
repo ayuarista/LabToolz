@@ -14,4 +14,9 @@ class Item extends Model
         'stock',
         'image',
     ];
+
+    public function returnItems()
+    {
+        return $this->hasMany(ReturnItem::class);
+    }
 }

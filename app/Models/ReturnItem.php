@@ -9,7 +9,8 @@ class ReturnItem extends Model
     protected $table = 'returns';
 
     protected $fillable = [
-        'loan_item_id',
+        'loan_id',
+        'item_id',
         'return_date',
         'conditional',
         'penalty',
@@ -17,8 +18,13 @@ class ReturnItem extends Model
 
     ];
 
-    public function loanItem()
+    public function loan()
     {
-        return $this->belongsTo(LoanItem::class);
+        return $this->belongsTo(Loan::class);
+    }
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
     }
 }
