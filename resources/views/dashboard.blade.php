@@ -11,6 +11,14 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     {{ __("You're logged in!") }}
                 </div>
+
+                <div>
+                    @if(auth()->user()->hasRole('teacher'))
+                        <p>Anda adalah guru</p>
+                    @elseif(auth()->user()->hasRole('student'))
+                        <p>Anda adalah siswa</p>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
