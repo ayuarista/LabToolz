@@ -10,13 +10,10 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     {{ __("You're logged in!") }}
-                </div>
-
-                <div>
                     @if(auth()->user()->hasRole('teacher'))
-                        <p>Anda adalah guru</p>
+                        <p class="text-yellow-300 font-bold text-3xl">Anda adalah guru</p>
                     @elseif(auth()->user()->hasRole('student'))
-                        <p>Anda adalah siswa</p>
+                        <p class="text-yellow-300 font-bold text-3xl">Anda adalah siswa</p>
                     @endif
                 </div>
             </div>

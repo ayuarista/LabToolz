@@ -3,8 +3,6 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
-use Spatie\Permission\Models\Role;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -17,24 +15,17 @@ class CreateNewUser implements CreatesNewUsers
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', 'in:teacher,student'],
         ])->validate();
-
-        // Validasi jika role teacher harus pakai email sekolah
-        if ($input['role'] === 'teacher' && !str_ends_with($input['email'], '@school.sch.id')) {
-            throw ValidationException::withMessages([
-                'email' => ['Only school email can register as teacher.'],
-            ]);
-        }
 
         $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
+            // 'role' => 'student', // Opsional: ini hanya kolom biasa, bukan Spatie
         ]);
 
-        // Berikan role sesuai input
-        $user->assignRole($input['role']);
+        // Ini yang penting untuk Spatie Permission
+        $user->assignRole('student');
 
         return $user;
     }
