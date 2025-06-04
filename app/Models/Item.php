@@ -13,10 +13,16 @@ class Item extends Model
         'description',
         'stock',
         'image',
+        'slug'
     ];
 
     public function returnItems()
     {
         return $this->hasMany(ReturnItem::class);
+    }
+
+    public function loans()
+    {
+        return $this->hasMany(Loan::class);
     }
 }

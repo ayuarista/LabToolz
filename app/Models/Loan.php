@@ -14,7 +14,6 @@ class Loan extends Model
         'loan_date',
         'return_date',
         'status',
-        'actual_return_date'
     ];
 
     public function user()

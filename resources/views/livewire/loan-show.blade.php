@@ -1,0 +1,117 @@
+<div class="p-8 max-w-7xl mx-auto text-black dark:text-white space-y-6">
+    <h1 class="text-2xl font-bold">Daftar Peminjaman</h1>
+
+    {{-- Alert Sukses/Error --}}
+    @if (session()->has('success'))
+        <div class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-4 py-2 rounded">
+            {{ session('success') }}
+        </div>
+    @elseif (session()->has('error'))
+        <div class="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-4 py-2 rounded">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    {{-- Tombol untuk Student: Menuju Form Peminjaman --}}
+    @if (auth()->user()->hasRole('student'))
+        <div class="text-right">
+            <a href="{{ route('loans.form') }}"
+               class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+               Ajukan Peminjaman
+            </a>
+        </div>
+    @endif
+
+    {{-- Filter Status hanya untuk guru/admin --}}
+    @if (auth()->user()->hasRole('teacher'))
+        <div class="flex items-center space-x-4">
+            <label class="font-semibold">Filter Status:</label>
+            <select wire:model="filterStatus"
+                    class="border rounded px-2 py-1 dark:bg-slate-700 dark:border-gray-600">
+                <option value="all">Semua</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="returned">Returned</option>
+                <option value="late">Late</option>
+            </select>
+        </div>
+    @endif
+
+    {{-- Tabel Data Peminjaman --}}
+    <div class="bg-white dark:bg-slate-800 rounded shadow p-4 overflow-x-auto">
+        <table class="w-full table-auto border-collapse">
+            <thead class="bg-gray-100 dark:bg-slate-700">
+                <tr>
+                    <th class="border px-4 py-2 text-left">#</th>
+                    <th class="border px-4 py-2 text-left">Nama Peminjam</th>
+                    <th class="border px-4 py-2 text-left">Kelas</th>
+                    <th class="border px-4 py-2 text-left">Tanggal Pinjam</th>
+                    <th class="border px-4 py-2 text-left">Rencana Kembali</th>
+                    <th class="border px-4 py-2 text-left">Status</th>
+                    <th class="border px-4 py-2 text-left">Detail Alat</th>
+                    @if (auth()->user()->hasRole('teacher'))
+                        <th class="border px-4 py-2 text-center">Aksi</th>
+                    @elseif (auth()->user()->hasRole('student'))
+                        <th class="border px-4 py-2 text-center">Aksi</th>
+                    @endif
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($loans as $loan)
+                    <tr class="border-t dark:border-gray-700">
+                        <td class="px-4 py-2">{{ $loop->iteration + ($loans->currentPage()-1)*$loans->perPage() }}</td>
+                        <td class="px-4 py-2">{{ $loan->user->name }}</td>
+                        <td class="px-4 py-2">{{ $loan->user->role }}</td>
+                        <td class="px-4 py-2">{{ $loan->loan_date }}</td>
+                        <td class="px-4 py-2">{{ $loan->return_date }}</td>
+                        <td class="px-4 py-2 capitalize">{{ $loan->status }}</td>
+                        <td class="px-4 py-2">
+                            {{-- List detail barang di peminjaman --}}
+                            <ul class="space-y-1">
+                                @foreach ($loan->loanItems as $detail)
+                                    <li class="flex items-center space-x-2">
+                                        <span class="font-medium">{{ $detail->item->name }}</span>
+                                        <span class="text-sm text-gray-600 dark:text-gray-300">
+                                            (x{{ $detail->quantity }})
+                                        </span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </td>
+                        <td class="px-4 py-2 text-center space-x-2">
+                            {{-- Jika guru dan status pending → tombol Approve --}}
+                            @if (auth()->user()->hasRole('teacher') && $loan->status === 'pending')
+                                <button wire:click="approve({{ $loan->id }})"
+                                        class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 text-sm">
+                                    Approve
+                                </button>
+                            @endif
+
+                            {{-- Jika student dan status approved → tombol Kembalikan --}}
+                            @if (auth()->user()->hasRole('student') && $loan->status === 'approved')
+                                <button wire:click="markReturned({{ $loan->id }})"
+                                        class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm">
+                                    Kembalikan
+                                </button>
+                            @endif
+
+                            {{-- Jika guru/admin dan status bukan pending → tidak ada tombol --}}
+                            {{-- Jika student dan bukan approved → tidak ada tombol --}}
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="8" class="px-4 py-2 text-center text-gray-500 dark:text-gray-400">
+                            Belum ada data peminjaman.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+
+        {{-- Pagination --}}
+        <div class="mt-4">
+            {{ $loans->links() }}
+        </div>
+    </div>
+</div>
