@@ -1,0 +1,6 @@
+* [33m7a9f892[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m feat: implement return item functionality with validation and UI for item return
+* [33mab2dbf9[m refactor: update item and loan models, remove unused files, and enhance role seeder
+*   [33meb255a5[m Merge branch 'mitha'
+[32m|[m[33m\[m  
+[32m|[m * [33mf2de021[m install fortify
+[32m|[m * [33maf94b17[m create file FortifyServiceProvider.php
