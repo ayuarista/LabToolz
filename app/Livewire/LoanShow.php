@@ -16,7 +16,6 @@ class LoanShow extends Component
 
     public $filterStatus = 'all';
 
-    // Menangani aksi approve (guru/admin)
     public function approve($loanId)
     {
         $loan = Loan::findOrFail($loanId);
@@ -26,7 +25,6 @@ class LoanShow extends Component
         }
 
         \DB::transaction(function () use ($loan) {
-            // Periksa stok dan kurangi stok setiap item
             foreach ($loan->loanItems as $loanItem) {
                 $item = $loanItem->item;
                 if ($item->stock < $loanItem->quantity) {
@@ -34,14 +32,11 @@ class LoanShow extends Component
                 }
                 $item->decrement('stock', $loanItem->quantity);
             }
-            // Update status loan menjadi 'approved'
             $loan->update(['status' => 'approved']);
         });
 
         session()->flash('success', 'Peminjaman telah di-approve, stok barang otomatis terpotong.');
     }
-
-    // Menangani pengembalian alat (ubah status jadi 'returned')
 
     public function markReturned($loanId)
     {
@@ -52,12 +47,10 @@ class LoanShow extends Component
         }
 
         \DB::transaction(function () use ($loan) {
-            // Kembalikan stok setiap item
             foreach ($loan->loanItems as $loanItem) {
                 $item = $loanItem->item;
                 $item->increment('stock', $loanItem->quantity);
             }
-            // Update status loan menjadi 'returned'
             $loan->update(['status' => 'returned']);
         });
 
@@ -66,7 +59,6 @@ class LoanShow extends Component
 
     public function render()
     {
-        // Query basic
         $query = Loan::with(['user', 'loanItems.item']);
 
         // Filter berdasarkan status
@@ -74,14 +66,14 @@ class LoanShow extends Component
             $query->where('status', $this->filterStatus);
         }
 
-        // Jika user role student, hanya tampilkan miliknya
         if (Auth::user()->hasRole('student')) {
             $query->where('user_id', Auth::id());
         }
 
-        // Pagination 10 per halaman
         $loans = $query->latest()->paginate(10);
 
-        return view('livewire.loan-show', compact('loans'))->layout('layouts.app');
+        $isTeacher = Auth::user()->hasRole('teacher');
+
+        return view('livewire.loan-show', compact('loans', 'isTeacher'))->layout('layouts.app');
     }
 }

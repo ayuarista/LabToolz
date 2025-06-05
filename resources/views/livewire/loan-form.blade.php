@@ -1,5 +1,5 @@
 <div class="p-8 max-w-6xl mx-auto text-black dark:text-white">
-    <h1 class="text-2xl font-bold mb-6">Form Peminjaman Alat</h1>
+    <h1 class="text-2xl font-bold mb-6">Form Peminjaman</h1>
 
     {{-- Alert sukses --}}
     @if (session()->has('success'))
@@ -10,7 +10,7 @@
 
     <form wire:submit.prevent="submitLoan" class="bg-white dark:bg-slate-800 rounded shadow p-6 mb-8 space-y-4">
         {{-- Tanggal Pinjam --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 space-x-2">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
                 <label class="block font-semibold mb-1">Tanggal Pinjam <span class="text-red-500 text-sm">*</span></label>
                 <input type="date" wire:model="loan_date"
@@ -22,7 +22,8 @@
 
             {{-- Tanggal Rencana Kembali --}}
             <div>
-                <label class="block font-semibold mb-1">Rencana Mengembalikan <span class="text-red-500 text-sm">*</span></label>
+                <label class="block font-semibold mb-1">Tanggal Mengembalikan<span
+                        class="text-red-500 text-sm">*</span></label>
                 <input type="date" wire:model="return_date"
                     class="w-full border rounded px-3 py-2 dark:bg-slate-700 dark:border-gray-600" />
                 @error('return_date')
@@ -33,18 +34,19 @@
 
         {{-- Daftar Alat --}}
         <div>
-            <label class="block font-semibold mb-2">Pilih Alat <span class="text-red-500 text-sm">*max 2 barang</span> </label>
+            <label class="block font-semibold mb-2">Pilih Alat <span class="text-red-500 text-sm">*max 2 barang</span>
+            </label>
 
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-2 gap-4">
                 @foreach ($items as $item)
-                    <div class="flex items-center justify-center space-x-2">
+                    <div class="flex space-x-2">
                         {{-- Checkbox --}}
                         <input type="checkbox" wire:model="selectedItems" value="{{ $item->id }}"
                             id="item-{{ $item->id }}"
-                            class="mt-1 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
+                            class="mt-1 text-indigo-600 focus:ring-indigo-500 border border-gray-600 dark:bg-slate-700 rounded" />
 
                         {{-- Detail Alat + jumlah & note --}}
-                        <div class="flex items-center justify-center space-y-1">
+                        <div class="flex-1 space-y-1">
                             <label for="item-{{ $item->id }}" class="font-medium">
                                 {{ $item->name }} (Stok: {{ $item->stock }})
                             </label>
@@ -69,21 +71,25 @@
             </div>
 
             @error('selectedItems')
-            <div class="mb-4 px-4 py-3 bg-red-100 dark:bg-red-900 text-red-800 dark:text-white rounded">
-                <span class="text-sm">{{ $message }}</span>
-            </div>
+                <div class="mb-4 px-4 py-3 bg-red-100 dark:bg-red-900 text-red-800 dark:text-white rounded">
+                    <span class="text-sm">{{ $message }}</span>
+                </div>
             @enderror
         </div>
 
-        {{-- Tombol Submit --}}
-        <div class="text-right">
-            <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
-                Ajukan Peminjaman
+        <div class="flex items-center justify-end space-x-2">
+            <button type="button" class="bg-gray-400 px-4 py-2 rounded hover:bg-gray-500 dark:bg-slate-600 dark:hover:dark:bg-slate-700 transition-all duration-300 ease-in-out"
+                onclick="window.location.href='{{ route('loans.show') }}'">
+                Batal
             </button>
+            <div class="text-right">
+                <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                    + Ajukan Peminjaman
+                </button>
+            </div>
         </div>
     </form>
 
-    {{-- Pagination --}}
     <div class="mt-4">
         {{ $items->links() }}
     </div>

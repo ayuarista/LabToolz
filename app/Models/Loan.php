@@ -30,4 +30,9 @@ class Loan extends Model
     {
         return $this->hasMany(ReturnItem::class);
     }
+
+    public function histories()
+    {
+        return $this->hasMany(History::class);
+    }
 }

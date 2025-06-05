@@ -55,7 +55,7 @@ class LoanForm extends Component
             }
         });
 
-        session()->flash('success', 'Peminjaman berhasil diajukan. Menunggu persetujuan.')->flash('error', 'Peminjaman gagal, silakan coba lagi.');
+        session()->flash('success', 'Peminjaman berhasil diajukan. Menunggu persetujuan.');
         $this->reset(['loan_date', 'return_date', 'selectedItems', 'quantities', 'notes']);
         return redirect('/loans');
     }

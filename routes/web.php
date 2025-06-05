@@ -4,6 +4,7 @@ use App\Livewire\Item;
 use App\Livewire\ItemShow;
 use App\Livewire\LoanForm;
 use App\Livewire\LoanShow;
+use App\Livewire\ReturnItemController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\RegisteredUserController;
@@ -30,8 +31,10 @@ Route::post('/register', [RegisteredUserController::class, 'store'])
 
     Route::middleware(['auth'])->group(function () {
         Route::get('/loans/form', LoanForm::class)->name('loans.form');
-
         Route::get('/loans', LoanShow::class)->name('loans.show');
+    });
+    Route::middleware('auth')->group(function () {
+        Route::get('/loans/{loanId}/return', ReturnItemController::class)->name('return.form');
     });
 
 Route::middleware('auth')->group(function () {

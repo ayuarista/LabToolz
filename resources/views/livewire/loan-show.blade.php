@@ -1,9 +1,9 @@
-<div class="p-8 max-w-7xl mx-auto text-black dark:text-white space-y-6">
+<div class="p-8 max-w-6xl mx-auto text-black dark:text-white space-y-6">
     <h1 class="text-2xl font-bold">Daftar Peminjaman</h1>
 
     {{-- Alert Sukses/Error --}}
     @if (session()->has('success'))
-        <div class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-4 py-2 rounded">
+        <div class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-white px-4 py-2 rounded">
             {{ session('success') }}
         </div>
     @elseif (session()->has('error'))
@@ -13,7 +13,7 @@
     @endif
 
     {{-- Tombol untuk Student: Menuju Form Peminjaman --}}
-    @if (auth()->user()->hasRole('student'))
+    @if (auth()->user()->role == 'student')
         <div class="text-right">
             <a href="{{ route('loans.form') }}"
                class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
@@ -23,7 +23,7 @@
     @endif
 
     {{-- Filter Status hanya untuk guru/admin --}}
-    @if (auth()->user()->hasRole('teacher'))
+    @if (auth()->user()->role == 'teacher')
         <div class="flex items-center space-x-4">
             <label class="font-semibold">Filter Status:</label>
             <select wire:model="filterStatus"
@@ -42,16 +42,16 @@
         <table class="w-full table-auto border-collapse">
             <thead class="bg-gray-100 dark:bg-slate-700">
                 <tr>
-                    <th class="border px-4 py-2 text-left">#</th>
-                    <th class="border px-4 py-2 text-left">Nama Peminjam</th>
+                    <th class="border px-4 py-2 text-left">No</th>
+                    <th class="border px-4 py-2 text-left">Nama</th>
                     <th class="border px-4 py-2 text-left">Kelas</th>
                     <th class="border px-4 py-2 text-left">Tanggal Pinjam</th>
-                    <th class="border px-4 py-2 text-left">Rencana Kembali</th>
+                    <th class="border px-4 py-2 text-left">Tanggal Mengembalikan</th>
                     <th class="border px-4 py-2 text-left">Status</th>
                     <th class="border px-4 py-2 text-left">Detail Alat</th>
-                    @if (auth()->user()->hasRole('teacher'))
+                    @if (auth()->user()->role == 'teacher')
                         <th class="border px-4 py-2 text-center">Aksi</th>
-                    @elseif (auth()->user()->hasRole('student'))
+                    @elseif (auth()->user()->role == 'student' && $filterStatus === 'pending')
                         <th class="border px-4 py-2 text-center">Aksi</th>
                     @endif
                 </tr>
@@ -79,25 +79,21 @@
                             </ul>
                         </td>
                         <td class="px-4 py-2 text-center space-x-2">
-                            {{-- Jika guru dan status pending → tombol Approve --}}
-                            @if (auth()->user()->hasRole('teacher') && $loan->status === 'pending')
+                            @if (auth()->user()->role == 'teacher' && $loan->status === 'pending')
                                 <button wire:click="approve({{ $loan->id }})"
                                         class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 text-sm">
                                     Approve
                                 </button>
                             @endif
 
-                            {{-- Jika student dan status approved → tombol Kembalikan --}}
-                            @if (auth()->user()->hasRole('student') && $loan->status === 'approved')
+                            @if (auth()->user()->role == 'student' && $loan->status === 'approved')
                                 <button wire:click="markReturned({{ $loan->id }})"
                                         class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm">
                                     Kembalikan
                                 </button>
                             @endif
-
-                            {{-- Jika guru/admin dan status bukan pending → tidak ada tombol --}}
-                            {{-- Jika student dan bukan approved → tidak ada tombol --}}
                         </td>
+
                     </tr>
                 @empty
                     <tr>
