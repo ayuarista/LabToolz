@@ -86,6 +86,12 @@
             <x-responsive-nav-link :href="route('loans.show')" :active="request()->routeIs('loans.show')">
                 {{ __('Loan') }}
             </x-responsive-nav-link>
+            @if(auth()->user()->hasRole('teacher'))
+                <x-responsive-nav-link :href="route('returns.show')" :active="request()->routeIs('returns.*')">
+                    {{ __('Return') }}
+                </x-responsive-nav-link>
+            @endif
+
         </div>
 
         <!-- Responsive Settings Options -->

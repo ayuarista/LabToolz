@@ -12,7 +12,6 @@
         </div>
     @endif
 
-    {{-- Tombol untuk Student: Menuju Form Peminjaman --}}
     @if (auth()->user()->role == 'student')
         <div class="text-right">
             <a href="{{ route('loans.form') }}"
@@ -22,7 +21,6 @@
         </div>
     @endif
 
-    {{-- Filter Status hanya untuk guru/admin --}}
     @if (auth()->user()->role == 'teacher')
         <div class="flex items-center space-x-4">
             <label class="font-semibold">Filter Status:</label>
@@ -37,7 +35,6 @@
         </div>
     @endif
 
-    {{-- Tabel Data Peminjaman --}}
     <div class="bg-white dark:bg-slate-800 rounded shadow p-4 overflow-x-auto">
         <table class="w-full table-auto border-collapse">
             <thead class="bg-gray-100 dark:bg-slate-700">
@@ -45,8 +42,8 @@
                     <th class="border px-4 py-2 text-left">No</th>
                     <th class="border px-4 py-2 text-left">Nama</th>
                     <th class="border px-4 py-2 text-left">Kelas</th>
-                    <th class="border px-4 py-2 text-left">Tanggal Pinjam</th>
-                    <th class="border px-4 py-2 text-left">Tanggal Mengembalikan</th>
+                    <th class="border px-4 py-2 text-left">Tgl. Pinjam</th>
+                    <th class="border px-4 py-2 text-left">Tgl. Mengembalikan</th>
                     <th class="border px-4 py-2 text-left">Status</th>
                     <th class="border px-4 py-2 text-left">Detail Alat</th>
                     @if (auth()->user()->role == 'teacher')
@@ -64,9 +61,18 @@
                         <td class="px-4 py-2">{{ $loan->user->role }}</td>
                         <td class="px-4 py-2">{{ $loan->loan_date }}</td>
                         <td class="px-4 py-2">{{ $loan->return_date }}</td>
-                        <td class="px-4 py-2 capitalize">{{ $loan->status }}</td>
                         <td class="px-4 py-2">
-                            {{-- List detail barang di peminjaman --}}
+                            @if ($loan->status === 'late')
+                                <span class="px-2 py-1 bg-red-100 text-red-600 rounded-md text-sm font-semibold">{{ $loan->status }}</span>
+                            @elseif ($loan->status === 'approved')
+                                <span class="px-2 py-1 bg-green-100 text-green-600 rounded-md text-sm font-semibold">{{ $loan->status }}</span>
+                            @elseif($loan->status === 'returned')
+                                <span class="px-2 py-1 bg-yellow-100 text-yellow-600 rounded-md text-sm font-semibold">{{ $loan->status }}</span>
+                            @else
+                                <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded-md text-sm font-semibold">{{ $loan->status }}</span>
+                            @endif
+                        </td>
+                        <td class="px-4 py-2">
                             <ul class="space-y-1">
                                 @foreach ($loan->loanItems as $detail)
                                     <li class="flex items-center space-x-2">
@@ -86,10 +92,26 @@
                                 </button>
                             @endif
 
-                            @if (auth()->user()->role == 'student' && $loan->status === 'approved')
+                            {{-- @if (auth()->user()->role == 'teacher' && $loan->status === 'approved')
+                                <a href="{{ route('loans.return', $loan->id) }}" class="text-white px-4 py-2 rounded bg-blue-600 hover:bg-blue-700">
+                                    Return
+                                </a>
+                            @endif --}}
+
+
+
+                            {{-- @if (auth()->user()->role == 'student' && $loan->status === 'approved')
                                 <button wire:click="markReturned({{ $loan->id }})"
                                         class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm">
                                     Kembalikan
+                                </button>
+                            @endif --}}
+                        </td>
+                        <td class="px-4 py-2 text-center space-x-2">
+                            @if (auth()->user()->role == 'teacher')
+                                <button wire:click="deleteLoan({{ $loan->id }})"
+                                        class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-sm">
+                                    delete
                                 </button>
                             @endif
                         </td>
@@ -105,9 +127,9 @@
             </tbody>
         </table>
 
-        {{-- Pagination --}}
         <div class="mt-4">
             {{ $loans->links() }}
         </div>
     </div>
 </div>
+

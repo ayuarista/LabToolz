@@ -17,9 +17,12 @@ class RoleSeeder extends Seeder
             'name' => 'student',
             'guard_name' => 'web'
         ]);
-
         Role::create([
             'name' => 'teacher',
+            'guard_name' => 'web'
+        ]);
+        Role::create([
+            'name' => 'admin',
             'guard_name' => 'web'
         ]);
     }
