@@ -111,7 +111,7 @@
                             @if (auth()->user()->role == 'teacher')
                                 <button wire:click="deleteLoan({{ $loan->id }})"
                                         class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-sm">
-                                    delete
+                                    hapus
                                 </button>
                             @endif
                         </td>
