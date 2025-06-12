@@ -2,7 +2,7 @@
     <h1 class="text-2xl font-bold mb-6">{{ $isEdit ? 'Edit Item' : 'Tambah Item' }}</h1>
 
     <form wire:submit.prevent="{{ $isEdit ? 'update' : 'store' }}" enctype="multipart/form-data" class="space-y-4">
-        <div class="grid grid-cols-3 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <label>Nama</label>
                 <input type="text" wire:model.defer="name" class="w-full rounded border p-2 dark:bg-slate-800 bg-white">
@@ -15,12 +15,12 @@
                 @error('stock') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 
-            <div class="col-span-3">
+            <div class="col-span-2">
                 <label>Deskripsi</label>
                 <textarea wire:model.defer="description" class="w-full rounded border p-2 dark:bg-slate-800 bg-white"></textarea>
                 @error('description') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
-            <div class="col-span-3">
+            <div class="col-span-2">
                 <label>Gambar</label>
                 <div class="w-full border-2 border-dashed border-indigo-500 rounded-md p-4 text-center relative">
                     <label class="cursor-pointer flex flex-col items-center justify-center space-y-2 text-gray-500 dark:text-gray-300">
