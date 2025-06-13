@@ -25,7 +25,7 @@
                 <div class="w-full border-2 border-dashed border-indigo-500 rounded-md p-4 text-center relative">
                     <label class="cursor-pointer flex flex-col items-center justify-center space-y-2 text-gray-500 dark:text-gray-300">
                         <ion-icon name="images" class="text-4xl"></ion-icon>
-                        <span class="text-sm">Klik di sini untuk upload gambar</span>
+                        <span class="text-sm">Klik di sini untuk mengupload gambar</span>
                         <input type="file" wire:model="newImage" class="hidden" />
                     </label>
 
