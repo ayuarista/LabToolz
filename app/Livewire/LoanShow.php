@@ -72,6 +72,3 @@ class LoanShow extends Component
         session()->flash('success', 'Peminjaman telah dihapus, stok barang dikembalikan.');
     }
 }
-
-// student hanya bisa melihat peminjaman yang ia lakukan, tetapi teacher bisa melihat semua peminjaman yang dilakukan oleh student. apabila stok barang tidak mencukupi, maka peminjaman tidak bisa di-approve dan akan menampilkan pesan error. apabila peminjaman sudah di-approve, maka stok barang otomatis berkurang.
-// apabila peminjaman sudah di-approve, maka status peminjaman akan berubah menjadi approved. apabila peminjaman sudah di-approve, maka tidak bisa di-approve lagi dan akan menampilkan pesan error. apabila peminjaman sudah di-approve, maka stok barang otomatis berkurang. Sediakan button delete untuk menghapus peminjaman ya (untuk guru dan siswa). Apabila peminjaman dihapus, maka stok barang akan dikembalikan ke jumlah semula. Apabila peminjaman dihapus. jangan pake throw new exception untuk ngasi error, tapi pake session flash message aja ya. Apabila peminjaman dihapus, maka akan menampilkan pesan sukses. Apabila peminjaman dihapus, maka stok barang akan dikembalikan ke jumlah semula.

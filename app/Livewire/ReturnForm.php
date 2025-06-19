@@ -59,7 +59,6 @@ class ReturnForm extends Component
                 'penalty' => $this->conditions[$item['id']] !== 'good' ? 5000 : 0,
             ]);
 
-            // Update stok hanya kalau barang dikembalikan
             if (in_array($this->conditions[$item['id']], ['good', 'damaged'])) {
                 Item::find($item['id'])->increment('stock', $item['quantity']);
             }
