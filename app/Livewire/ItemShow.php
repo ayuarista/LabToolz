@@ -24,5 +24,11 @@ class ItemShow extends Component
             Storage::disk('public')->delete($item->image);
         }
         $item->delete();
+
+        $this->dispatch('swal', [
+            'title' => 'Dihapus!',
+            'text' => 'Item berhasil dihapus.',
+            'icon' => 'success'
+        ]);
     }
 }
