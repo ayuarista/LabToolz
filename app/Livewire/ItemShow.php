@@ -25,10 +25,7 @@ class ItemShow extends Component
         }
         $item->delete();
 
-        $this->dispatch('swal', [
-            'title' => 'Dihapus!',
-            'text' => 'Item berhasil dihapus.',
-            'icon' => 'success'
-        ]);
+        session()->flash('message', 'Item deleted successfully.');
+        return redirect()->route('items.index');
     }
 }
